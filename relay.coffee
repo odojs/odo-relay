@@ -1,24 +1,39 @@
-# Relay is a pattern introduced 
+# Relay is a pattern introduced by facebook
+# https://facebook.github.io/react/blog/2015/02/20/introducing-relay-and-graphql.html
+# https://facebook.github.io/react/blog/2015/03/19/building-the-facebook-news-feed-with-relay.html
+# https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
 
 extend = require 'extend'
 parallelqueries = require './parallelqueries'
 ql = require 'odoql/ql'
+layers = require './layers'
 
+# Stores are an object of functions
+# Each function takes a query and a callback and returns a cancel function
+# The callback is normal error, result
+#
+# e.g.
+# stores =
+#   json: (query, cb) ->
+#     handle = dosomething query, cb
+#     -> handle.cancel()
 module.exports = (el, component, stores) ->
-  scene = null
+  _scene = null
   
-  memory = {}
-  query = {}
-  state = {}
+  _memory = {}
+  _query = {}
+  _state = layers()
+  
+  _layers = []
   
   update = ->
-    if !scene?
+    if !_scene?
       Relay.mount()
       return
-    scene.update state, memory
+    _scene.update _state.get(), _memory
   
   pq = parallelqueries 5, (timings) ->
-    times = Object.keys query
+    times = Object.keys _query
       .map (prop) ->
         "  #{prop} in #{timings[prop]}ms"
       .join '\n'
@@ -28,13 +43,13 @@ module.exports = (el, component, stores) ->
   # TODO: Eventually support optimistic updates - data changes that are temp applied on top of state while an ajax request is processing, eventually merging into state once the request has finished or removed from state if the request failed. Similar to a copy on write file system.
   Relay =
     mount: ->
-      scene = component.mount el, state, memory
+      _scene = component.mount el, _state.get(), _memory
     
     update: (params) ->
-      extend memory, params
-      newquery = component.query memory
-      diff = ql.diff query, newquery
-      query = newquery
+      extend _memory, params
+      newquery = component.query _memory
+      diff = ql.diff _query, newquery
+      _query = newquery
       # no query still need to update based off params
       return update() if Object.keys(diff).length is 0
       console.log ql.describe diff
@@ -46,13 +61,18 @@ module.exports = (el, component, stores) ->
               if err?
                 console.log "! #{err}"
               cb err, (keys) ->
+                updates = {}
                 for key in keys
-                  state[key] = results[key]
+                  updates[key] = results[key]
+                _state.apply updates
     
-    params: -> memory
+    layer: _state.layer
+    
+    params: -> _memory
+    state: -> _state.get()
     
     unmount: ->
-      scene.unmount()
-      scene = null
+      _scene.unmount()
+      _scene = null
   
   Relay
