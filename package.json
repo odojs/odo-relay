@@ -1,0 +1,24 @@
+{
+  "name": "odo-relay",
+  "version": "0.0.1",
+  "description": "Unidirectional loop for odojs",
+  "main": "relay.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Thomas Coats",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/odojs/odo-relay/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:odojs/odo-relay.git"
+  },
+  "readmeFilename": "README.md",
+  "homepage": "https://github.com/odojs/odo-relay",
+  "dependencies": {
+    "extend": "^2.0.0",
+    "odoql": "^4.0.0"
+  }
+}
