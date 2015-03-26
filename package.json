@@ -20,6 +20,6 @@
   "dependencies": {
     "extend": "2.0.0",
     "odo-async": "1.0.0",
-    "odoql": "5.1.1"
+    "odoql": "5.1.2"
   }
 }
