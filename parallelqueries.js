@@ -7,12 +7,10 @@ module.exports = function(max, idle) {
   start = function(entry) {
     var cancel;
     entry.startedAt = new Date().getTime();
-    _running.push(entry);
     cancel = entry.task(function(err, cb) {
       var fin, index, key, _i, _len, _ref;
       index = _running.indexOf(entry);
       _running.splice(index, 1);
-      next();
       if (err == null) {
         fin = new Date().getTime();
         _ref = entry.keys;
@@ -22,10 +20,7 @@ module.exports = function(max, idle) {
         }
         cb(entry.keys);
       }
-      if ((idle != null) && _running.length === 0) {
-        idle(_batch);
-        return _batch = {};
-      }
+      return next();
     });
     if (_running.indexOf(entry) === -1) {
       return;
@@ -37,6 +32,11 @@ module.exports = function(max, idle) {
     return next();
   };
   next = function() {
+    if ((idle != null) && _running.length === 0 && _queued.length === 0) {
+      idle(_batch);
+      _batch = {};
+      return;
+    }
     if (_queued.length === 0) {
       return;
     }
@@ -67,14 +67,16 @@ module.exports = function(max, idle) {
         return false;
       });
     },
-    exec: function(keys, task) {
+    add: function(keys, task) {
       var entry;
       entry = {
         keys: keys,
         task: task
       };
       result.cancel(keys);
-      _queued.push(entry);
+      return _queued.push(entry);
+    },
+    exec: function() {
       return next();
     }
   };

@@ -7,6 +7,7 @@ extend = require 'extend'
 parallelqueries = require './parallelqueries'
 ql = require 'odoql/ql'
 layers = require './layers'
+async = require 'odo-async'
 
 # Stores are an object of functions
 # Each function takes a query and a callback and returns a cancel function
@@ -56,18 +57,21 @@ module.exports = (el, component, stores) ->
         window.hub.emit 'queries starting',
           diff: diff
           description: ql.describe diff
-      diff = ql.build diff, stores
-      for q in diff
-        do (q) ->
-          pq.exec q.keys, (cb) ->
-            q.query (err, results) ->
-              if err?
-                console.log "! #{err}"
-              cb err, (keys) ->
-                updates = {}
-                for key in keys
-                  updates[key] = results[key]
-                _state.apply updates
+      
+      async.delay ->
+        diff = ql.build diff, stores
+        for q in diff
+          do (q) ->
+            pq.add q.keys, (cb) ->
+              q.query (err, results) ->
+                if err? and window?.hub?
+                  window.hub.emit 'query error {err}', err: err
+                cb err, (keys) ->
+                  updates = {}
+                  for key in keys
+                    updates[key] = results[key]
+                  _state.apply updates
+        pq.exec()
     
     layer: _state.layer
     

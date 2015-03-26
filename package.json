@@ -1,6 +1,6 @@
 {
   "name": "odo-relay",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Unidirectional loop for odojs",
   "main": "relay.js",
   "scripts": {
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/odojs/odo-relay",
   "dependencies": {
     "extend": "^2.0.0",
+    "odo-async": "^1.0.0",
     "odoql": "^4.0.0"
   }
 }
