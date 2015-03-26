@@ -56,7 +56,7 @@ module.exports = (el, component, stores) ->
       if window?.hub?
         window.hub.emit 'queries starting',
           diff: diff
-          description: ql.describe diff
+          description: ql.desc diff
       
       async.delay ->
         diff = ql.build diff, stores

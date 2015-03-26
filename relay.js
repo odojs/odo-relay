@@ -53,7 +53,7 @@ module.exports = function(el, component, stores) {
       if ((typeof window !== "undefined" && window !== null ? window.hub : void 0) != null) {
         window.hub.emit('queries starting', {
           diff: diff,
-          description: ql.describe(diff)
+          description: ql.desc(diff)
         });
       }
       return async.delay(function() {
