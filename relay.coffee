@@ -33,11 +33,11 @@ module.exports = (el, component, stores) ->
     _scene.update _state.get(), _memory
   
   pq = parallelqueries 5, (timings) ->
-    times = Object.keys _query
-      .map (prop) ->
-        "  #{prop} in #{timings[prop]}ms"
-      .join '\n'
-    console.log "√ completed\n#{times}"
+    if window?.hub?
+      _timings = {}
+      for key, _ of timings
+        _timings[key] = timings[key]
+      window.hub.emit 'queries completed', _timings
     update()
   
   # TODO: Eventually support optimistic updates - data changes that are temp applied on top of state while an ajax request is processing, eventually merging into state once the request has finished or removed from state if the request failed. Similar to a copy on write file system.
@@ -52,7 +52,10 @@ module.exports = (el, component, stores) ->
       _query = newquery
       # no query still need to update based off params
       return update() if Object.keys(diff).length is 0
-      console.log ql.describe diff
+      if window?.hub?
+        window.hub.emit 'queries starting',
+          diff: diff
+          description: ql.describe diff
       diff = ql.build diff, stores
       for q in diff
         do (q) ->

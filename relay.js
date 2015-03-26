@@ -24,11 +24,15 @@ module.exports = function(el, component, stores) {
     return _scene.update(_state.get(), _memory);
   };
   pq = parallelqueries(5, function(timings) {
-    var times;
-    times = Object.keys(_query).map(function(prop) {
-      return "  " + prop + " in " + timings[prop] + "ms";
-    }).join('\n');
-    console.log("√ completed\n" + times);
+    var key, _, _timings;
+    if ((typeof window !== "undefined" && window !== null ? window.hub : void 0) != null) {
+      _timings = {};
+      for (key in timings) {
+        _ = timings[key];
+        _timings[key] = timings[key];
+      }
+      window.hub.emit('queries completed', _timings);
+    }
     return update();
   });
   Relay = {
@@ -44,7 +48,12 @@ module.exports = function(el, component, stores) {
       if (Object.keys(diff).length === 0) {
         return update();
       }
-      console.log(ql.describe(diff));
+      if ((typeof window !== "undefined" && window !== null ? window.hub : void 0) != null) {
+        window.hub.emit('queries starting', {
+          diff: diff,
+          description: ql.describe(diff)
+        });
+      }
       diff = ql.build(diff, stores);
       _results = [];
       for (_i = 0, _len = diff.length; _i < _len; _i++) {
