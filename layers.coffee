@@ -8,10 +8,10 @@ module.exports = (initialState) ->
   _layers = []
   
   if initialState?
-    extend _state, initialState
+    extend yes, _state, initialState
   
   apply: (diff) ->
-    extend _state, diff
+    extend yes, _state, diff
   
   clear: ->
     _state = {}
@@ -20,7 +20,7 @@ module.exports = (initialState) ->
     result = {}
     extend result, _state
     for layer in _layers
-      extend result, layer
+      extend yes, result, layer
     result
   
   layer: (layer) ->
