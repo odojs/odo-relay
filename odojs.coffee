@@ -9,5 +9,5 @@ relay = require './relay'
 
 module.exports = (component, spec) ->
   return if !spec.query?
-  component.relay = (el, stores) ->
-    relay el, component, stores
+  component.relay = (el, exe, queries, state) ->
+    relay el, component, exe, queries, state

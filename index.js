@@ -7,8 +7,8 @@ layers = require('odo-layers');
 
 cache = require('odoql-exe/cache');
 
-module.exports = function(el, component, exe) {
-  var Relay, _memory, _scene, _state, update;
+module.exports = function(el, component, exe, options) {
+  var Relay, _cache, _memory, _scene, _state, update;
   _scene = null;
   _memory = {};
   _state = layers();
@@ -18,16 +18,22 @@ module.exports = function(el, component, exe) {
     }
     return _scene.update(_state.get(), _memory);
   };
-  cache = cache(exe);
-  cache.on('ready', update);
-  cache.on('result', _state.apply);
+  _cache = cache(exe);
+  _cache.on('ready', update);
+  _cache.on('result', _state.apply);
+  if (options.queries != null) {
+    _cache.apply(options.queries);
+  }
+  if (options.state != null) {
+    _state.apply(options.state);
+  }
   Relay = {
     mount: function() {
       return _scene = component.mount(el, _state.get(), _memory);
     },
     update: function(params) {
       extend(_memory, params);
-      return cache.run(component.query(_memory));
+      return _cache.run(component.query(_memory));
     },
     layer: _state.layer,
     params: function() {

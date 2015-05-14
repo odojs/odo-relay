@@ -7,7 +7,7 @@ extend = require 'extend'
 layers = require 'odo-layers'
 cache = require 'odoql-exe/cache'
 
-module.exports = (el, component, exe) ->
+module.exports = (el, component, exe, options) ->
   _scene = null
   _memory = {}
   _state = layers()
@@ -16,16 +16,19 @@ module.exports = (el, component, exe) ->
     return Relay.mount() if !_scene?
     _scene.update _state.get(), _memory
   
-  cache = cache exe
-  cache.on 'ready', update
-  cache.on 'result', _state.apply
+  _cache = cache exe
+  _cache.on 'ready', update
+  _cache.on 'result', _state.apply
+  
+  _cache.apply options.queries if options.queries?
+  _state.apply options.state if options.state?
   
   Relay =
     mount: ->
       _scene = component.mount el, _state.get(), _memory
     update: (params) ->
       extend _memory, params
-      cache.run component.query _memory
+      _cache.run component.query _memory
     layer: _state.layer
     params: -> _memory
     state: -> _state.get()
