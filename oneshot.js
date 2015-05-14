@@ -16,7 +16,7 @@ module.exports = function(exe, component, params, cb) {
     if (err != null) {
       return cb(err);
     }
-    html = component(state, params);
+    html = component.stringify(state, params);
     return cb(null, {
       params: params,
       queries: queries,

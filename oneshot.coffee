@@ -8,7 +8,7 @@ module.exports = (exe, component, params, cb) ->
   run = build exe, queries
   run (err, state) ->
     return cb err if err?
-    html = component state, params
+    html = component.stringify state, params
     cb null,
       params: params
       queries: queries
