@@ -2,7 +2,7 @@
   "name": "odo-relay",
   "version": "0.1.1",
   "description": "Unidirectional loop for odojs",
-  "main": "relay.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,8 +18,7 @@
   "readmeFilename": "README.md",
   "homepage": "https://github.com/odojs/odo-relay",
   "dependencies": {
-    "extend": "2.0.0",
-    "odo-async": "1.0.0",
-    "odoql": "5.1.2"
+    "odo-layers": "^1.0.0",
+    "odoql-exe": "1.0.0"
   }
 }
