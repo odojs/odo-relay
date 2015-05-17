@@ -8,17 +8,27 @@ layers = require('odo-layers');
 cache = require('odoql-exe/cache');
 
 module.exports = function(el, component, exe, options) {
-  var Relay, _cache, _memory, _scene, _state, update;
+  var Relay, _cache, _memory, _scene, _state, log, update;
   _scene = null;
   _memory = {};
   _state = layers();
+  log = function() {};
+  if ((options != null ? options.hub : void 0) != null) {
+    log = function(message) {
+      return options.hub.emit('[odo-relay] {message}', {
+        message: message
+      });
+    };
+  }
   update = function() {
     if (_scene == null) {
+      log('mounting');
       return Relay.mount();
     }
+    log('updating');
     return _scene.update(_state.get(), _memory);
   };
-  _cache = cache(exe);
+  _cache = cache(exe, options);
   _cache.on('ready', update);
   _cache.on('result', _state.apply);
   if (options.queries != null) {

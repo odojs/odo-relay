@@ -8,15 +8,23 @@ layers = require 'odo-layers'
 cache = require 'odoql-exe/cache'
 
 module.exports = (el, component, exe, options) ->
+  # needs async checking
   _scene = null
   _memory = {}
   _state = layers()
   
+  log = ->
+  if options?.hub?
+    log = (message) -> options.hub.emit '[odo-relay] {message}', message: message
+  
   update = ->
-    return Relay.mount() if !_scene?
+    if !_scene?
+      log 'mounting'
+      return Relay.mount()
+    log 'updating'
     _scene.update _state.get(), _memory
   
-  _cache = cache exe
+  _cache = cache exe, options
   _cache.on 'ready', update
   _cache.on 'result', _state.apply
   
