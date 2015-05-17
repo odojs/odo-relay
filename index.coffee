@@ -25,7 +25,7 @@ module.exports = (el, component, exe, options) ->
   
   Relay =
     mount: ->
-      _scene = component.mount el, _state.get(), _memory
+      _scene = component.mount el, _state.get(), _memory, options
     update: (params) ->
       extend _memory, params
       _cache.run component.query _memory

@@ -7,7 +7,7 @@ module.exports = function(component, spec) {
   if (spec.query == null) {
     return;
   }
-  return component.relay = function(el, exe, queries, state) {
-    return relay(el, component, exe, queries, state);
+  return component.relay = function(el, exe, options) {
+    return relay(el, component, exe, options);
   };
 };

@@ -29,7 +29,7 @@ module.exports = function(el, component, exe, options) {
   }
   Relay = {
     mount: function() {
-      return _scene = component.mount(el, _state.get(), _memory);
+      return _scene = component.mount(el, _state.get(), _memory, options);
     },
     update: function(params) {
       extend(_memory, params);
