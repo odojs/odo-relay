@@ -31,10 +31,10 @@ module.exports = function(el, component, exe, options) {
   _cache = cache(exe, options);
   _cache.on('ready', update);
   _cache.on('result', _state.apply);
-  if (options.queries != null) {
+  if ((options != null ? options.queries : void 0) != null) {
     _cache.apply(options.queries);
   }
-  if (options.state != null) {
+  if ((options != null ? options.state : void 0) != null) {
     _state.apply(options.state);
   }
   Relay = {

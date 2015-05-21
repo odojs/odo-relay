@@ -28,8 +28,8 @@ module.exports = (el, component, exe, options) ->
   _cache.on 'ready', update
   _cache.on 'result', _state.apply
   
-  _cache.apply options.queries if options.queries?
-  _state.apply options.state if options.state?
+  _cache.apply options.queries if options?.queries?
+  _state.apply options.state if options?.state?
   
   Relay =
     mount: ->
