@@ -1,6 +1,6 @@
 {
   "name": "odo-relay",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Unidirectional loop for odojs",
   "main": "index.js",
   "scripts": {
