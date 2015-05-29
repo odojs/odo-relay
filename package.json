@@ -19,6 +19,6 @@
   "homepage": "https://github.com/odojs/odo-relay",
   "dependencies": {
     "odo-layers": "1.0.1",
-    "odoql-exe": "1.2.1"
+    "odoql-exe": "1.2.2"
   }
 }
