@@ -22,7 +22,7 @@ module.exports = (el, component, exe, options) ->
       log 'mounting'
       return Relay.mount()
     log 'updating'
-    _scene.update _state.get(), _memory
+    _scene.update _state.get(), _memory, options?.hub
   
   _cache = cache exe, options
   _cache.on 'ready', update

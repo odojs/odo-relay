@@ -26,7 +26,7 @@ module.exports = function(el, component, exe, options) {
       return Relay.mount();
     }
     log('updating');
-    return _scene.update(_state.get(), _memory);
+    return _scene.update(_state.get(), _memory, options != null ? options.hub : void 0);
   };
   _cache = cache(exe, options);
   _cache.on('ready', update);
