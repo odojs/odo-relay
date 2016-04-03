@@ -39,6 +39,7 @@ module.exports = (el, component, exe, options) ->
       _cache.run component.query _memory
     layer: _state.layer
     params: -> _memory
+    clearParams: -> _memory = {}
     hub: -> options?.hub
     state: -> _state.get()
     unmount: ->
