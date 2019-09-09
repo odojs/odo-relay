@@ -18,8 +18,8 @@
   "readmeFilename": "README.md",
   "homepage": "https://github.com/odojs/odo-relay",
   "dependencies": {
-    "extend": "3.0.0",
+    "extend": "^3.0.2",
     "odo-layers": "1.0.2",
-    "odoql-exe": "1.5.0"
+    "odoql-exe": "^1.6.2"
   }
 }
